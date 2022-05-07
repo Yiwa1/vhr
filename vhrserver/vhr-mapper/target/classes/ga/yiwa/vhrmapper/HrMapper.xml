@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ga.yiwa.vhrmapper.HrMapper">
+    <resultMap id="BaseResultMap" type="ga.yiwa.vhrmodel.Hr">
+        <id column="id" property="id" jdbcType="INTEGER"></id>
+        <result column="name" property="name" jdbcType="VARCHAR"></result>
+        <result column="phone" property="phone" jdbcType="CHAR"></result>
+        <result column="telephone" property="telephone" jdbcType="VARCHAR"></result>
+        <result column="address" property="address" jdbcType="VARCHAR"></result>
+        <result column="enabled" property="enabled" jdbcType="TINYINT"></result>
+        <result column="username" property="username" jdbcType="VARCHAR"></result>
+        <result column="password" property="password" jdbcType="VARCHAR"></result>
+        <result column="userface" property="userface" jdbcType="VARCHAR"></result>
+        <result column="remark" property="remark" jdbcType="VARCHAR"></result>
+    </resultMap>
+
+    <select id="loadUserByUsername" resultMap="BaseResultMap">
+        SELECT * FROM vhrprod.hr where username=#{username}
+    </select>
+
+
+
+</mapper>

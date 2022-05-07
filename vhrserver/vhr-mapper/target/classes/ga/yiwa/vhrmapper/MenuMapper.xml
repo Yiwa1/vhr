@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ga.yiwa.vhrmapper.MenuMapper">
+
+<resultMap id="BaseResultMap" type="ga.yiwa.vhrmodel.Menu">
+    <id column="id" property="id" jdbcType="INTEGER"/>
+    <result column="url" property="url" jdbcType="VARCHAR"/>
+    <result column="path" property="path" jdbcType="VARCHAR"/>
+    <result column="component" property="component" jdbcType="VARCHAR"/>
+    <result column="name" property="name" jdbcType="VARCHAR"/>
+    <result column="icon_cls" property="iconCls" jdbcType="VARCHAR"/>
+    <result column="parent_id" property="parentId" jdbcType="INTEGER"/>
+    <result column="enabled" property="enabled" jdbcType="TINYINT"/>
+    <association property="meta" javaType="ga.yiwa.vhrmodel.Meta">
+        <result column="keep_alive" property="keepAlive" jdbcType="TINYINT"/>
+        <result column="require_auth" property="requireAuth" jdbcType="TINYINT"/>
+    </association>
+</resultMap>
+
+
+<resultMap id="MenuWithChildren" type="ga.yiwa.vhrmodel.Menu">
+    <id column="id1" property="id" jdbcType="INTEGER"/>
+    <result column="name1" property="name" jdbcType="VARCHAR"/>
+    <collection property="children" ofType="ga.yiwa.vhrmodel.Menu">
+        <id column="id2" property="id"/>
+        <result column="name2" property="name"/>
+        <collection property="children" ofType="ga.yiwa.vhrmodel.Menu">
+            <id column="id3" property="id"/>
+            <result column="name3" property="name"/>
+        </collection>
+    </collection>
+</resultMap>
+    
+    <resultMap id="MenuWithRole" type="ga.yiwa.vhrmodel.Menu" extends="BaseResultMap">
+        <collection property="roles" ofType="ga.yiwa.vhrmodel.Role">
+            <id column="rid" property="id"/>
+            <result column="rname" property="name"/>
+            <result column="rnameZh" property="nameZh"/>
+        </collection>
+    </resultMap>
+
+    <select id="getAllMenus" resultMap="MenuWithChildren">
+        SELECT m1.`id` as id1,m1.`name` as name1,m2.`id` as id2,m2.`name` as name2,m3.`id` as id3,m3.`name` as name3
+        FROM vhrprod.menu m1,vhrprod.menu m2,vhrprod.menu m3
+        WHERE m1.`id`=m2.`parent_id` and m2.`id`=m3.`parent_id` and m3.`enabled`=true
+        ORDER BY m1.`id`,m2.`id`,m3.`id`;
+    </select>
+    
+    <select id="getAllMenusWithRole" resultMap="MenuWithRole">
+        SELECT m.*, r.id as rid, r.name as rname, r.name_zh as rnameZh
+        FROM  vhrprod.menu m, vhrprod.menu_role mr, vhrprod.role r
+        WHERE m.id=mr.mid and mr.rid=r.id
+        ORDER BY m.url DESC , m.id ASC
+
+    </select>
+    
+
+
+</mapper>
