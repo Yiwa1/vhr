@@ -15,7 +15,7 @@ class VhrWebApplicationTests {
     HrService hrService;
     @Test
     void contextLoads() {
-        System.out.println("Succe");
+        System.out.println("hello");
     }
 
 }
